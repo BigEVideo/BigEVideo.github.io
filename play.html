@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大E网 - 视频播放页</title>
+    <style>
+        /* 全局样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar img {
+            height: 50px;
+        }
+
+        /* 视频播放区域 */
+        .video-section {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .video-section .video-container {
+            flex: 3;
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-section .video-container video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .video-section .related-videos {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .related-videos .video-item {
+            background-color: #fff;
+            padding: 0.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer; /* 添加手形指针效果 */
+        }
+
+        .related-videos .video-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .related-videos .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 视频信息区域 */
+        .video-info {
+            background-color: #fff;
+            margin-top: 1rem;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-info h2 {
+            margin: 0 0 1rem;
+            font-size: 1.5rem;
+        }
+
+        .video-info p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        /* 评论区 */
+        .comments {
+            margin-top: 1rem;
+        }
+
+        /* 添加作者信息样式 */
+        .video-item .author {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .video-section {
+                flex-direction: column;
+            }
+
+            .video-section .video-container,
+            .video-section .related-videos {
+                flex: 1;
+            }
+        }
+/* 页尾样式 */
+#pageFooter {
+    background-color: white;
+    color: #333;
+    text-align: center;
+    padding: 1.5rem 0;
+    position: relative; /* 如果想让页尾固定在底部可改为fixed */
+    width: 100%;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+#pageFooter a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+#pageFooter a:hover {
+    color: #0056b3;
+}
+
+#pageFooter p {
+    margin: 0.5rem 0;
+}
+.video-container {
+    position: relative;
+}
+
+.watermark {
+    position: absolute;
+    top: 15px;  /* 水印的固定位置 */
+    right: 20px;
+    z-index: 1000;  /* 确保水印的 z-index 高于视频 */
+    pointer-events: none;
+}
+
+.watermark img {
+    width: 100px;
+    opacity: 0.5;  /* 水印透明度 */
+}
+    </style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<header class="navbar container">
+    <img src="image/logo.png" alt="Logo">
+</header>
+
+<section class="container">
+    <div class="video-section">
+        <!-- 视频播放区域 -->
+        <div class="video-container" id="videoContainer">
+            <video controls id="videoPlayer">
+                <source src="" type="video/mp4">
+                您的浏览器不支持 HTML5 视频播放。
+            </video>
+    <div class="watermark" id="watermark">
+        <img src="image/watermark.png">
+</div>
+            <div class="video-info">
+                <h2 id="videoTitle">视频标题</h2>
+                <p id="videoAuthor">作者: </p>
+                <p id="videoDate">发布时间: </p>
+                <p id="videoDescription">视频简介: </p>
+            </div>
+        </div>
+
+        <!-- 相关视频区域 -->
+        <div class="related-videos" id="relatedVideos">
+            <div class="video-item">
+                <img src="image/404.jpg" alt="Related Video 1">
+                <p>404 Not Found</p>
+            <p class="author">作者：Null</p>
+            </div>
+            <div class="video-item">
+                <img src="image/404.jpg" alt="Related Video 2">
+                <p>404 Not Found</p>
+            <p class="author">作者：Null</p>
+            </div>
+            <!-- 更多相关视频项 -->
+        </div>
+    </div>
+
+    <!-- 评论区 -->
+    <div class="comments">
+        <div class="giscus">
+            <!-- Giscus 评论区 -->
+<script src="https://giscus.app/client.js"
+        data-repo="BigEVideo/BigEVideo.github.io"
+        data-repo-id="R_kgDOMyfh-Q"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOMyfh-c4CihFr"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+        </div>
+    </div>
+</section>
+
+<!-- 简洁的页尾 -->
+<footer id="pageFooter">
+    <div class="container">
+        <p style="color:#a6d90d;font-size:20px;">独到视界，欢娱无限</p>
+        <p>© 2024 大E网 - All Rights Reserved</p>
+        <p><a href="about.html">关于我们</a> | <a href="privacy.html">隐私政策</a> | <a href="contact.html">联系我们</a></p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoTitle = document.getElementById('videoTitle');
+        const videoAuthor = document.getElementById('videoAuthor');
+        const videoDate = document.getElementById('videoDate');
+        const videoDescription = document.getElementById('videoDescription');
+        const videoContainer = document.getElementById('videoContainer');
+        
+        // 获取 URL 中的查询参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('id');
+        
+        // 模拟视频数据（在实际应用中，你可能需要通过 API 获取数据）
+        const videoData = {
+            "1": {
+                "src": "video/1.mp4",
+                "title": "【B哥的一天】Mermaid Abige",
+                "author": "飞机君",
+                "date": "2024-09-16",
+                "description": "原创 一个寒假就做这玩意，一半时间开发素材，一半时间做。",
+                "relatedVideos": [
+                    {"thumbnail": "image/videoimg/2.jpg", "title": "B哥的一天【功夫】", "id": "2", "author": "飞机君"},
+                    {"thumbnail": "image/videoimg/3.jpg", "title": "【B哥的一天】sig sig 【big big】", "id": "3", "author": "飞机君"}
+                ]
+            },
+            "2": {
+                "src": "video/2.mp4",
+                "title": "B哥的一天【功夫】",
+                "author": "飞机君",
+                "date": "2024-09-16",
+                "description": "原创 这曲子叫マイムマイム不叫功夫。",
+                "relatedVideos": [
+                    {"thumbnail": "image/videoimg/1.jpg", "title": "【B哥的一天】Mermaid Abige", "id": "1", "author": "飞机君"},
+                    {"thumbnail": "image/videoimg/3.jpg", "title": "【B哥的一天】sig sig 【big big】", "id": "3", "author": "飞机君"}
+                ]
+            },
+            "3": {
+                "src": "video/3.mp4",
+                "title": "【B哥的一天】sig sig 【big big】",
+                "author": "飞机君",
+                "date": "2024-09-16",
+                "description": "自制 12年做的",
+                "relatedVideos": [
+                    {"thumbnail": "image/videoimg/1.jpg", "title": "【B哥的一天】Mermaid Abige", "id": "1", "author": "飞机君"},
+                    {"thumbnail": "image/videoimg/2.jpg", "title": "B哥的一天【功夫】", "id": "2", "author": "飞机君"}
+                ]
+            }
+        };
+
+        // 检查是否有视频 ID，如果没有，则显示 404 页面
+        if (videoId && videoData[videoId]) {
+            const video = videoData[videoId];
+            
+            // 设置视频源
+            videoPlayer.querySelector('source').src = video.src;
+            videoPlayer.load();
+            
+            // 设置视频信息
+            videoTitle.textContent = video.title;
+            videoAuthor.textContent = `作者: ${video.author}`;
+            videoDate.textContent = `发布时间: ${video.date}`;
+            videoDescription.textContent = `简介: ${video.description}`;
+            
+            // 设置相关视频
+            const relatedVideos = document.getElementById('relatedVideos');
+            relatedVideos.innerHTML = '';  // 清空原有的相关视频
+
+            video.relatedVideos.forEach(related => {
+                const relatedItem = document.createElement('div');
+                relatedItem.classList.add('video-item');
+                relatedItem.innerHTML = `
+                    <img src="${related.thumbnail}" alt="${related.title}">
+                    <p>${related.title}</p>
+                    <p class="author">作者：${related.author}</p>
+                `;
+                
+                // 添加点击事件，跳转到对应视频 ID 的播放页
+                relatedItem.addEventListener('click', () => {
+                    window.location.href = `play.html?id=${related.id}`;
+                });
+                
+                relatedVideos.appendChild(relatedItem);
+            });
+        } else {
+            // 如果没有视频 ID，或者找不到对应的视频，显示 404 提示
+            videoContainer.innerHTML = `<h2>404 Not Found</h2>`;
+        }
+    });
+</script>
+
+</body>
+</html>
