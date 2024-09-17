@@ -46,6 +46,7 @@
             background-color: #fff;
             padding: 1rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* 添加相对定位，用于水印 */
         }
 
         .video-section .video-container video {
@@ -53,7 +54,25 @@
             border-radius: 8px;
         }
 
-        .video-section .related-videos {
+        .video-info {
+            background-color: #fff;
+            margin-top: 1rem;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-info h2 {
+            margin: 0 0 1rem;
+            font-size: 1.5rem;
+        }
+
+        .video-info p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        /* 相关视频区域 */
+        .related-videos {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -80,34 +99,46 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* 视频信息区域 */
-        .video-info {
-            background-color: #fff;
-            margin-top: 1rem;
-            padding: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .video-info h2 {
-            margin: 0 0 1rem;
-            font-size: 1.5rem;
-        }
-
-        .video-info p {
-            margin: 0.5rem 0;
-            color: #666;
-        }
-
         /* 评论区 */
         .comments {
             margin-top: 1rem;
         }
 
-        /* 添加作者信息样式 */
-        .video-item .author {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 0.5rem;
+        /* 页尾样式 */
+        #pageFooter {
+            background-color: white;
+            color: #333;
+            text-align: center;
+            padding: 1.5rem 0;
+            width: 100%;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        #pageFooter a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        #pageFooter a:hover {
+            color: #0056b3;
+        }
+
+        /* 水印样式 */
+        .watermark {
+            position: absolute;
+            top: 15px; /* 调整水印位置 */
+            right: 20px;
+            z-index: 1000; /* 确保水印位于视频上方 */
+            pointer-events: none; /* 禁止水印拦截鼠标事件 */
+        }
+
+        .watermark img {
+            width: 100px;
+            opacity: 0.5; /* 设置水印透明度 */
         }
 
         /* 响应式设计 */
@@ -117,53 +148,10 @@
             }
 
             .video-section .video-container,
-            .video-section .related-videos {
+            .related-videos {
                 flex: 1;
             }
         }
-/* 页尾样式 */
-#pageFooter {
-    background-color: white;
-    color: #333;
-    text-align: center;
-    padding: 1.5rem 0;
-    position: relative; /* 如果想让页尾固定在底部可改为fixed */
-    width: 100%;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    margin-top: 2rem;
-}
-
-#pageFooter a {
-    color: #007bff;
-    text-decoration: none;
-    margin: 0 10px;
-    transition: color 0.3s ease;
-}
-
-#pageFooter a:hover {
-    color: #0056b3;
-}
-
-#pageFooter p {
-    margin: 0.5rem 0;
-}
-.video-container {
-    position: relative;
-}
-
-.watermark {
-    position: absolute;
-    top: 15px;  /* 水印的固定位置 */
-    right: 20px;
-    z-index: 1000;  /* 确保水印的 z-index 高于视频 */
-    pointer-events: none;
-}
-
-.watermark img {
-    width: 100px;
-    opacity: 0.5;  /* 水印透明度 */
-}
     </style>
 </head>
 <body>
@@ -181,9 +169,9 @@
                 <source src="" type="video/mp4">
                 您的浏览器不支持 HTML5 视频播放。
             </video>
-    <div class="watermark" id="watermark">
-        <img src="image/watermark.png">
-</div>
+            <div class="watermark" id="watermark">
+                <img src="image/watermark.png" alt="Watermark">
+            </div>
             <div class="video-info">
                 <h2 id="videoTitle">视频标题</h2>
                 <p id="videoAuthor">作者: </p>
@@ -208,29 +196,28 @@
         </div>
     </div>
 
-<!-- 评论区 -->
-<div class="comments">
-    <div class="giscus">
-        <!-- Giscus 评论区 -->
-        <script id="giscus-script"
-            src="https://giscus.app/client.js"
-            data-repo="BigEVideo/BigEVideo.github.io"
-            data-repo-id="R_kgDOMyfh-Q"
-            data-category="Announcements"
-            data-category-id="DIC_kwDOMyfh-c4CihFr"
-            data-mapping="specific"
-            data-term=""
-            data-strict="0"
-            data-reactions-enabled="1"
-            data-emit-metadata="0"
-            data-input-position="bottom"
-            data-theme="preferred_color_scheme"
-            data-lang="zh-CN"
-            crossorigin="anonymous"
-            async>
-        </script>
+    <!-- 评论区 -->
+    <div class="comments">
+        <div class="giscus">
+            <!-- Giscus 评论区 -->
+            <script src="https://giscus.app/client.js"
+                    data-repo="BigEVideo/BigEVideo.github.io"
+                    data-repo-id="R_kgDOMyfh-Q"
+                    data-category="Announcements"
+                    data-category-id="DIC_kwDOMyfh-c4CihFr"
+                    data-mapping="specific"
+                    data-term=""
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="bottom"
+                    data-theme="preferred_color_scheme"
+                    data-lang="zh-CN"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
     </div>
-</div>
 </section>
 
 <!-- 简洁的页尾 -->
@@ -250,7 +237,6 @@
         const videoDate = document.getElementById('videoDate');
         const videoDescription = document.getElementById('videoDescription');
         const videoContainer = document.getElementById('videoContainer');
-        const giscusScript = document.getElementById('giscus-script');
         
         // 获取 URL 中的查询参数
         const urlParams = new URLSearchParams(window.location.search);
@@ -316,7 +302,7 @@
             "6": {
                 "src": "video/6.mp4",
                 "title": "《双喜天天喷》第35集",
-                "author": "暮色流年",e
+                "author": "暮色流年",
                 "date": "2024-09-17",
                 "description": "暂无",
                 "relatedVideos": [
@@ -348,57 +334,59 @@
             }
         };
 
-        // 检查是否有视频 ID，如果没有，则显示 404 页面
-        if (videoId && videoData[videoId]) {
-            const video = videoData[videoId];
-            
-            // 设置视频源
-            videoPlayer.querySelector('source').src = video.src;
-            videoPlayer.load();
-            
-            // 设置视频信息
-            videoTitle.textContent = video.title;
-            videoAuthor.textContent = `作者: ${video.author}`;
-            videoDate.textContent = `发布时间: ${video.date}`;
-            videoDescription.textContent = `简介: ${video.description}`;
-            
-            // 设置相关视频
-            const relatedVideos = document.getElementById('relatedVideos');
-            relatedVideos.innerHTML = '';  // 清空原有的相关视频
+ // 检查是否有视频 ID，如果没有，则显示 404 页面
+    if (videoId && videoData[videoId]) {
+        const video = videoData[videoId];
+        
+        // 设置视频源
+        videoPlayer.querySelector('source').src = video.src;
+        videoPlayer.load();
+        
+        // 设置视频信息
+        videoTitle.textContent = video.title;
+        videoAuthor.textContent = `作者: ${video.author}`;
+        videoDate.textContent = `发布时间: ${video.date}`;
+        videoDescription.textContent = `简介: ${video.description}`;
+        
+        // 设置相关视频
+        const relatedVideos = document.getElementById('relatedVideos');
+        relatedVideos.innerHTML = '';  // 清空原有的相关视频
 
-            video.relatedVideos.forEach(related => {
-                const relatedItem = document.createElement('div');
-                relatedItem.classList.add('video-item');
-                relatedItem.innerHTML = `
-                    <img src="${related.thumbnail}" alt="${related.title}">
-                    <p>${related.title}</p>
-                    <p class="author">作者：${related.author}</p>
-                `;
-                
-                // 添加点击事件，跳转到对应视频 ID 的播放页
-                relatedItem.addEventListener('click', () => {
-                    window.location.href = `play.html?id=${related.id}`;
-                });
-                
-                relatedVideos.appendChild(relatedItem);
+        video.relatedVideos.forEach(related => {
+            const relatedItem = document.createElement('div');
+            relatedItem.classList.add('video-item');
+            relatedItem.innerHTML = `
+                <img src="${related.thumbnail}" alt="${related.title}">
+                <p>${related.title}</p>
+                <p class="author">作者：${related.author}</p>
+            `;
+            
+            // 添加点击事件，跳转到对应视频 ID 的播放页
+            relatedItem.addEventListener('click', () => {
+                window.location.href = `play.html?id=${related.id}`;
             });
-            // 设置 Giscus 评论区的 data-term 为 videoId，确保每个视频有独立的评论区
-            giscusScript.setAttribute('data-term', videoId);
+            
+            relatedVideos.appendChild(relatedItem);
+        });
 
-            // 重新加载 Giscus 评论区（需要完全移除并重新插入脚本）
-            const giscusContainer = document.querySelector('.giscus');
-            giscusContainer.innerHTML = '';  // 清空当前评论区
-            const newScript = document.createElement('script');
-            newScript.src = giscusScript.src;
-            Array.from(giscusScript.attributes).forEach(attr => {
-                newScript.setAttribute(attr.name, attr.value);
-            });
-            giscusContainer.appendChild(newScript);
-        } else {
-            // 如果没有视频 ID，或者找不到对应的视频，显示 404 提示
-            videoContainer.innerHTML = `<h2>404 Not Found</h2>`;
-        }
-    });
+        // 设置 Giscus 评论区的 data-term 为 videoId，确保每个视频有独立的评论区
+        const giscusScript = document.querySelector('script[src="https://giscus.app/client.js"]');
+        giscusScript.setAttribute('data-term', videoId);
+
+        // 重新加载 Giscus 评论区
+        const giscusContainer = document.querySelector('.giscus');
+        giscusContainer.innerHTML = '';  // 清空当前评论区
+        const newScript = document.createElement('script');
+        newScript.src = giscusScript.src;
+        Array.from(giscusScript.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+        });
+        giscusContainer.appendChild(newScript);
+    } else {
+        // 如果没有视频 ID，或者找不到对应的视频，显示 404 提示
+        videoContainer.innerHTML = `<h2>404 Not Found</h2>`;
+    }
+});
 </script>
 
 </body>
