@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.png" sizes="16x16" type="image/png"> 
+    <link rel="icon" href="favicon.png" sizes="16x16" type="image/png">
     <title>大E视频网 - 视频播放页</title>
     <style>
         /* 全局样式 */
@@ -165,7 +165,7 @@
     <div class="video-section">
         <!-- 视频播放区域 -->
         <div class="video-container" id="videoContainer">
-            <video controls id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return(false);">
+            <video controls id="videoPlayer" controlsList="nodownload" oncontextmenu="return(false);">
                 <source src="" type="video/mp4">
                 您的浏览器不支持 HTML5 视频播放。
             </video>
@@ -174,7 +174,7 @@
             </div>
             <div class="video-info">
                 <h2 id="videoTitle">视频标题</h2>
-                <p id="videoAuthor">作者: </p>
+                <p id="videoAuthor">作者: <a href="#" id="authorLink">点击查看作者信息</a></p>
                 <p id="videoDate">发布时间: </p>
                 <p id="videoDescription">视频简介: </p>
             </div>
@@ -185,12 +185,12 @@
             <div class="video-item">
                 <img src="image/404.jpg" alt="Related Video 1">
                 <p>404 Not Found</p>
-            <p class="author">作者：Null</p>
+                <p class="author">作者：Null</p>
             </div>
             <div class="video-item">
                 <img src="image/404.jpg" alt="Related Video 2">
                 <p>404 Not Found</p>
-            <p class="author">作者：Null</p>
+                <p class="author">作者：Null</p>
             </div>
             <!-- 更多相关视频项 -->
         </div>
@@ -237,11 +237,11 @@
         const videoDate = document.getElementById('videoDate');
         const videoDescription = document.getElementById('videoDescription');
         const videoContainer = document.getElementById('videoContainer');
-        
+
         // 获取 URL 中的查询参数
         const urlParams = new URLSearchParams(window.location.search);
         const videoId = urlParams.get('id');
-        
+
         // 模拟视频数据（在实际应用中，你可能需要通过 API 获取数据）
         const videoData = {
             "1": {
@@ -345,59 +345,65 @@
         }
         };
 
- // 检查是否有视频 ID，如果没有，则显示 404 页面
-    if (videoId && videoData[videoId]) {
-        const video = videoData[videoId];
-        
-        // 设置视频源
-        videoPlayer.querySelector('source').src = video.src;
-        videoPlayer.load();
-        
-        // 设置视频信息
-        videoTitle.textContent = video.title;
-        videoAuthor.textContent = `作者: ${video.author}`;
-        videoDate.textContent = `发布时间: ${video.date}`;
-        videoDescription.textContent = `简介: ${video.description}`;
-        
-        // 设置相关视频
-        const relatedVideos = document.getElementById('relatedVideos');
-        relatedVideos.innerHTML = '';  // 清空原有的相关视频
+        // 检查是否有视频 ID，如果没有，则显示 404 页面
+        if (videoId && videoData[videoId]) {
+            const video = videoData[videoId];
 
-        video.relatedVideos.forEach(related => {
-            const relatedItem = document.createElement('div');
-            relatedItem.classList.add('video-item');
-            relatedItem.innerHTML = `
-                <img src="${related.thumbnail}" alt="${related.title}">
-                <p>${related.title}</p>
-                <p class="author">作者：${related.author}</p>
-            `;
-            
-            // 添加点击事件，跳转到对应视频 ID 的播放页
-            relatedItem.addEventListener('click', () => {
-                window.location.href = `play.html?id=${related.id}`;
+            // 设置视频源
+            videoPlayer.querySelector('source').src = video.src;
+            videoPlayer.load();
+
+            // 设置视频信息
+            videoTitle.textContent = video.title;
+            videoAuthor.innerHTML = `作者: <a href="#" id="authorLink">${video.author}</a>`;
+            videoDate.textContent = `发布时间: ${video.date}`;
+            videoDescription.textContent = `简介: ${video.description}`;
+
+            // 设置相关视频
+            const relatedVideos = document.getElementById('relatedVideos');
+            relatedVideos.innerHTML = '';  // 清空原有的相关视频
+
+            video.relatedVideos.forEach(related => {
+                const relatedItem = document.createElement('div');
+                relatedItem.classList.add('video-item');
+                relatedItem.innerHTML = `
+                    <img src="${related.thumbnail}" alt="${related.title}">
+                    <p>${related.title}</p>
+                    <p class="author">作者：${related.author}</p>
+                `;
+
+                // 添加点击事件，跳转到对应视频 ID 的播放页
+                relatedItem.addEventListener('click', () => {
+                    window.location.href = `play.html?id=${related.id}`;
+                });
+
+                relatedVideos.appendChild(relatedItem);
             });
-            
-            relatedVideos.appendChild(relatedItem);
-        });
 
-        // 设置 Giscus 评论区的 data-term 为 videoId，确保每个视频有独立的评论区
-        const giscusScript = document.querySelector('script[src="https://giscus.app/client.js"]');
-        giscusScript.setAttribute('data-term', videoId);
+            // 设置 Giscus 评论区的 data-term 为 videoId，确保每个视频有独立的评论区
+            const giscusScript = document.querySelector('script[src="https://giscus.app/client.js"]');
+            giscusScript.setAttribute('data-term', videoId);
 
-        // 重新加载 Giscus 评论区
-        const giscusContainer = document.querySelector('.giscus');
-        giscusContainer.innerHTML = '';  // 清空当前评论区
-        const newScript = document.createElement('script');
-        newScript.src = giscusScript.src;
-        Array.from(giscusScript.attributes).forEach(attr => {
-            newScript.setAttribute(attr.name, attr.value);
-        });
-        giscusContainer.appendChild(newScript);
-    } else {
-        // 如果没有视频 ID，或者找不到对应的视频，显示 404 提示
-        videoContainer.innerHTML = `<h2>404 Not Found</h2>`;
-    }
-});
+            // 重新加载 Giscus 评论区
+            const giscusContainer = document.querySelector('.giscus');
+            giscusContainer.innerHTML = '';  // 清空当前评论区
+            const newScript = document.createElement('script');
+            newScript.src = giscusScript.src;
+            Array.from(giscusScript.attributes).forEach(attr => {
+                newScript.setAttribute(attr.name, attr.value);
+            });
+            giscusContainer.appendChild(newScript);
+
+            // 添加弹窗功能
+            document.getElementById('authorLink').addEventListener('click', function(event) {
+                event.preventDefault();  // 阻止默认链接行为
+                alert(`此播客设置了禁止访问，请联系作者！`);  // 弹出作者信息
+            });
+        } else {
+            // 如果没有视频 ID，或者找不到对应的视频，显示 404 提示
+            videoContainer.innerHTML = `<h2>404 Not Found</h2>`;
+        }
+    });
 </script>
 
 </body>
